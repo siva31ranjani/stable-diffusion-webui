@@ -1111,7 +1111,7 @@ def create_ui():
     ui_settings_from_file = loadsave.ui_settings.copy()
 
     settings.create_ui(loadsave, dummy_component)
-,visible=False, interactive=False
+
     interfaces = [
         (txt2img_interface, "txt2img", "txt2img"),
         (img2img_interface, "img2img", "img2img"),
