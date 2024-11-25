@@ -263,7 +263,7 @@ def create_ui():
 
     scripts.scripts_current = scripts.scripts_txt2img
     scripts.scripts_txt2img.initialize_scripts(is_img2img=False)
-
+'''
     with gr.Blocks(analytics_enabled=False,visible=False, interactive=False) as txt2img_interface:
         toprow = ui_toprow.Toprow(is_img2img=False, is_compact=shared.opts.compact_prompt_box)
 
@@ -897,26 +897,26 @@ def create_ui():
     modelmerger_ui = ui_checkpoint_merger.UiCheckpointMerger()
 
     with gr.Blocks(analytics_enabled=False,visible=False, interactive=False) as train_interface:
-        with gr.Row(equal_height=False):
+        with gr.Row(equal_height=False,visible=False, interactive=False):
             gr.HTML(value="<p style='margin-bottom: 0.7em'>See <b><a href=\"https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Textual-Inversion\">wiki</a></b> for detailed explanation.</p>")
 
-        with ResizeHandleRow(variant="compact", equal_height=False):
-            with gr.Tabs(elem_id="train_tabs"):
+        with ResizeHandleRow(variant="compact", equal_height=False,visible=False, interactive=False):
+            with gr.Tabs(elem_id="train_tabs",visible=False, interactive=False):
 
-                with gr.Tab(label="Create embedding", id="create_embedding"):
+                with gr.Tab(label="Create embedding", id="create_embedding",visible=False, interactive=False):
                     new_embedding_name = gr.Textbox(label="Name", elem_id="train_new_embedding_name")
                     initialization_text = gr.Textbox(label="Initialization text", value="*", elem_id="train_initialization_text")
                     nvpt = gr.Slider(label="Number of vectors per token", minimum=1, maximum=75, step=1, value=1, elem_id="train_nvpt")
                     overwrite_old_embedding = gr.Checkbox(value=False, label="Overwrite Old Embedding", elem_id="train_overwrite_old_embedding")
 
-                    with gr.Row():
+                    with gr.Row(visible=False, interactive=False,visible=False, interactive=False):
                         with gr.Column(scale=3):
                             gr.HTML(value="")
 
-                        with gr.Column():
+                        with gr.Column(visible=False, interactive=False):
                             create_embedding = gr.Button(value="Create embedding", variant='primary', elem_id="train_create_embedding")
 
-                with gr.Tab(label="Create hypernetwork", id="create_hypernetwork"):
+                with gr.Tab(label="Create hypernetwork", id="create_hypernetwork",visible=False, interactive=False):
                     new_hypernetwork_name = gr.Textbox(label="Name", elem_id="train_new_hypernetwork_name")
                     new_hypernetwork_sizes = gr.CheckboxGroup(label="Modules", value=["768", "320", "640", "1280"], choices=["768", "1024", "320", "640", "1280"], elem_id="train_new_hypernetwork_sizes")
                     new_hypernetwork_layer_structure = gr.Textbox("1, 2, 1", label="Enter hypernetwork layer structure", placeholder="1st and last digit must be 1. ex:'1, 2, 1'", elem_id="train_new_hypernetwork_layer_structure")
@@ -927,11 +927,11 @@ def create_ui():
                     new_hypernetwork_dropout_structure = gr.Textbox("0, 0, 0", label="Enter hypernetwork Dropout structure (or empty). Recommended : 0~0.35 incrementing sequence: 0, 0.05, 0.15", placeholder="1st and last digit must be 0 and values should be between 0 and 1. ex:'0, 0.01, 0'")
                     overwrite_old_hypernetwork = gr.Checkbox(value=False, label="Overwrite Old Hypernetwork", elem_id="train_overwrite_old_hypernetwork")
 
-                    with gr.Row():
+                    with gr.Row(visible=False, interactive=False):
                         with gr.Column(scale=3):
                             gr.HTML(value="")
 
-                        with gr.Column():
+                        with gr.Column(visible=False, interactive=False):
                             create_hypernetwork = gr.Button(value="Create hypernetwork", variant='primary', elem_id="train_create_hypernetwork")
 
                 def get_textual_inversion_template_names():
@@ -939,29 +939,29 @@ def create_ui():
 
                 with gr.Tab(label="Train", id="train"):
                     gr.HTML(value="<p style='margin-bottom: 0.7em'>Train an embedding or Hypernetwork; you must specify a directory with a set of 1:1 ratio images <a href=\"https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Textual-Inversion\" style=\"font-weight:bold;\">[wiki]</a></p>")
-                    with FormRow():
+                    with FormRow(visible=False, interactive=False):
                         train_embedding_name = gr.Dropdown(label='Embedding', elem_id="train_embedding", choices=sorted(sd_hijack.model_hijack.embedding_db.word_embeddings.keys()))
                         create_refresh_button(train_embedding_name, sd_hijack.model_hijack.embedding_db.load_textual_inversion_embeddings, lambda: {"choices": sorted(sd_hijack.model_hijack.embedding_db.word_embeddings.keys())}, "refresh_train_embedding_name")
 
                         train_hypernetwork_name = gr.Dropdown(label='Hypernetwork', elem_id="train_hypernetwork", choices=sorted(shared.hypernetworks))
                         create_refresh_button(train_hypernetwork_name, shared.reload_hypernetworks, lambda: {"choices": sorted(shared.hypernetworks)}, "refresh_train_hypernetwork_name")
 
-                    with FormRow():
+                    with FormRow(visible=False, interactive=False):
                         embedding_learn_rate = gr.Textbox(label='Embedding Learning rate', placeholder="Embedding Learning rate", value="0.005", elem_id="train_embedding_learn_rate")
                         hypernetwork_learn_rate = gr.Textbox(label='Hypernetwork Learning rate', placeholder="Hypernetwork Learning rate", value="0.00001", elem_id="train_hypernetwork_learn_rate")
 
-                    with FormRow():
+                    with FormRow(visible=False, interactive=False):
                         clip_grad_mode = gr.Dropdown(value="disabled", label="Gradient Clipping", choices=["disabled", "value", "norm"])
                         clip_grad_value = gr.Textbox(placeholder="Gradient clip value", value="0.1", show_label=False)
 
-                    with FormRow():
+                    with FormRow(visible=False, interactive=False):
                         batch_size = gr.Number(label='Batch size', value=1, precision=0, elem_id="train_batch_size")
                         gradient_step = gr.Number(label='Gradient accumulation steps', value=1, precision=0, elem_id="train_gradient_step")
 
                     dataset_directory = gr.Textbox(label='Dataset directory', placeholder="Path to directory with input images", elem_id="train_dataset_directory")
                     log_directory = gr.Textbox(label='Log directory', placeholder="Path to directory where to write outputs", value="textual_inversion", elem_id="train_log_directory")
 
-                    with FormRow():
+                    with FormRow(visible=False, interactive=False):
                         template_file = gr.Dropdown(label='Prompt template', value="style_filewords.txt", elem_id="train_template_file", choices=get_textual_inversion_template_names())
                         create_refresh_button(template_file, textual_inversion.list_textual_inversion_templates, lambda: {"choices": get_textual_inversion_template_names()}, "refrsh_train_template_file")
 
@@ -970,7 +970,7 @@ def create_ui():
                     varsize = gr.Checkbox(label="Do not resize images", value=False, elem_id="train_varsize")
                     steps = gr.Number(label='Max steps', value=100000, precision=0, elem_id="train_steps")
 
-                    with FormRow():
+                    with FormRow(visible=False, interactive=False):
                         create_image_every = gr.Number(label='Save an image to log directory every N steps, 0 to disable', value=500, precision=0, elem_id="train_create_image_every")
                         save_embedding_every = gr.Number(label='Save a copy of embedding to log directory every N steps, 0 to disable', value=500, precision=0, elem_id="train_save_embedding_every")
 
@@ -984,7 +984,7 @@ def create_ui():
 
                     latent_sampling_method = gr.Radio(label='Choose latent sampling method', value="once", choices=['once', 'deterministic', 'random'], elem_id="train_latent_sampling_method")
 
-                    with gr.Row():
+                    with gr.Row(visible=False, interactive=False):
                         train_embedding = gr.Button(value="Train Embedding", variant='primary', elem_id="train_train_embedding")
                         interrupt_training = gr.Button(value="Interrupt", elem_id="train_interrupt_training")
                         train_hypernetwork = gr.Button(value="Train Hypernetwork", variant='primary', elem_id="train_train_hypernetwork")
@@ -1106,7 +1106,7 @@ def create_ui():
             inputs=[],
             outputs=[],
         )
-
+'''
     loadsave = ui_loadsave.UiLoadsave(cmd_opts.ui_config_file)
     ui_settings_from_file = loadsave.ui_settings.copy()
 
@@ -1126,7 +1126,16 @@ def create_ui():
 
     extensions_interface = ui_extensions.create_ui()
     interfaces += [(extensions_interface, "Extensions", "extensions")]
-    
+    '''
+    def disable_visibility_and_interaction(interface_list):
+        for interface, _, _ in interface_list:
+            for component in interface.children:
+                if isinstance(component, (gr.Textbox, gr.Button, gr.Slider, gr.Image)):
+                    component.visible = False
+                    component.interactive = False
+
+   
+    disable_visibility_and_interaction(interfaces)'''
 
     shared.tab_names = []
     for _interface, label, _ifid in interfaces:
